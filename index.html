@@ -408,6 +408,162 @@
           font-size: 10px;
         }
       }
+
+      /* Add styles for help modal */
+      .help-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .help-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      .help-content h2 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .help-content h3 {
+        color: #444;
+        margin: 15px 0 10px;
+      }
+
+      .help-content p {
+        margin: 10px 0;
+        line-height: 1.5;
+      }
+
+      .help-content ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+
+      .help-content li {
+        margin: 5px 0;
+      }
+
+      .close-help {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .close-help:hover {
+        color: #333;
+      }
+
+      /* Add styles for results modal */
+      .results-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .results-content {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        position: relative;
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      .results-content h2 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 28px;
+      }
+
+      .results-content .winner {
+        font-size: 24px;
+        margin: 20px 0;
+        padding: 15px;
+        border-radius: 10px;
+      }
+
+      .results-content .winner.red {
+        background-color: rgba(255, 107, 107, 0.1);
+        color: var(--red-color);
+      }
+
+      .results-content .winner.blue {
+        background-color: rgba(77, 150, 255, 0.1);
+        color: var(--blue-color);
+      }
+
+      .results-content .scores {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+      }
+
+      .results-content .score-box {
+        padding: 15px;
+        border-radius: 10px;
+        width: 45%;
+      }
+
+      .results-content .score-box.red {
+        background-color: rgba(255, 107, 107, 0.1);
+        border: 2px solid var(--red-color);
+      }
+
+      .results-content .score-box.blue {
+        background-color: rgba(77, 150, 255, 0.1);
+        border: 2px solid var(--blue-color);
+      }
+
+      .results-content .score-value {
+        font-size: 32px;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .results-content .close-results {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .results-content .close-results:hover {
+        color: #333;
+      }
+
+      .results-content .new-game-btn {
+        margin-top: 20px;
+        padding: 12px 30px;
+        font-size: 18px;
+      }
     </style>
   </head>
   <body>
@@ -435,6 +591,7 @@
     </div>
 
     <div class="controls">
+      <button id="help-btn" class="secondary">How to Play</button>
       <button id="reset-btn">Reset Game</button>
       <button id="pause-btn">Pause</button>
       <button id="undo-btn" class="secondary" disabled>Undo</button>
@@ -446,6 +603,81 @@
     <div class="move-history">
       <h3 style="font-weight: bold">Move History</h3>
       <div id="history-list"></div>
+    </div>
+
+    <div class="help-modal" id="help-modal">
+      <div class="help-content">
+        <span class="close-help" id="close-help">&times;</span>
+        <h2>How to Play Titan's Circuit</h2>
+        
+        <h3>Game Overview</h3>
+        <p>Titan's Circuit is a strategic hexagonal board game where players compete to control circuits and score points.</p>
+
+        <h3>Setup</h3>
+        <ul>
+          <li>Players take turns placing their titans (4 each) on the board</li>
+          <li>Start by placing titans in the outer circuit</li>
+          <li>Must fill the outer circuit completely before moving to middle circuit</li>
+          <li>Must fill the middle circuit completely before moving to inner circuit</li>
+        </ul>
+
+        <h3>Gameplay</h3>
+        <ul>
+          <li>After placing all titans, players take turns moving their titans</li>
+          <li>Each titan can move to any adjacent empty node</li>
+          <li>When two of your titans are connected by an edge, you control that edge</li>
+          <li>Each edge has a point value (shown on the edge)</li>
+          <li>Score points by controlling edges between your titans</li>
+        </ul>
+
+        <h3>Scoring</h3>
+        <ul>
+          <li>Outer circuit edges: 1 point each</li>
+          <li>Middle circuit edges: 6 points each</li>
+          <li>Inner circuit edges: 8-9 points each</li>
+          <li>Higher value edges are closer to the center</li>
+        </ul>
+
+        <h3>Winning</h3>
+        <p>The player with the highest score when time runs out wins!</p>
+
+        <h3>Controls</h3>
+        <ul>
+          <li>Click nodes to place or move titans</li>
+          <li>Use Undo/Redo to take back or replay moves</li>
+          <li>Pause button to pause the game</li>
+          <li>Reset to start a new game</li>
+          <li>Toggle sound effects on/off</li>
+          <li>Play against AI or another player</li>
+        </ul>
+
+        <h3>Tips</h3>
+        <ul>
+          <li>Control high-value edges in the inner circuit for more points</li>
+          <li>Block your opponent from controlling valuable edges</li>
+          <li>Watch the timer - plan your moves efficiently</li>
+          <li>Use the movement phase to create new connections and score points</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="results-modal" id="results-modal">
+      <div class="results-content">
+        <span class="close-results" id="close-results">&times;</span>
+        <h2>Game Over</h2>
+        <div id="winner-display" class="winner"></div>
+        <div class="scores">
+          <div class="score-box red">
+            <div>Red Player</div>
+            <div class="score-value" id="final-score-red">0</div>
+          </div>
+          <div class="score-box blue">
+            <div>Blue Player</div>
+            <div class="score-value" id="final-score-blue">0</div>
+          </div>
+        </div>
+        <button class="new-game-btn" id="new-game-btn">New Game</button>
+      </div>
     </div>
 
     <audio id="place-sound" src="arcade jump.wav" preload="auto"></audio>
@@ -486,6 +718,12 @@
           this.soundBtn = document.getElementById("sound-btn");
           this.aiBtn = document.getElementById("ai-btn");
           this.historyList = document.getElementById("history-list");
+          this.helpBtn = document.getElementById('help-btn');
+          this.helpModal = document.getElementById('help-modal');
+          this.closeHelp = document.getElementById('close-help');
+          this.resultsModal = document.getElementById('results-modal');
+          this.closeResults = document.getElementById('close-results');
+          this.newGameBtn = document.getElementById('new-game-btn');
 
           // Add start game button
           this.addStartGameButton();
@@ -506,6 +744,15 @@
           this.redoBtn.addEventListener("click", () => this.redoMove());
           this.soundBtn.addEventListener("click", () => this.toggleSound());
           this.aiBtn.addEventListener("click", () => this.toggleAIMode());
+          this.helpBtn.addEventListener('click', () => this.showHelp());
+          this.closeHelp.addEventListener('click', () => this.hideHelp());
+          this.closeResults.addEventListener('click', () => this.hideResults());
+          this.newGameBtn.addEventListener('click', () => location.reload());
+          window.addEventListener('click', (e) => {
+            if (e.target === this.helpModal) {
+              this.hideHelp();
+            }
+          });
           
           // Add resize handler
           window.addEventListener('resize', () => {
@@ -978,11 +1225,14 @@
         }
 
         updateEdgeControl() {
-          // Reset all edge control
+          // Reset all edge control and scores
           this.state.edges.forEach((edge) => {
             edge.controlledBy = null;
             edge.element.className = "hex-edge";
           });
+
+          // Reset scores before recalculating
+          this.state.scores = { red: 0, blue: 0 };
 
           // Check each edge for control
           this.state.edges.forEach((edge) => {
@@ -1001,6 +1251,16 @@
               this.state.scores[node1.occupied] += edge.weight;
             }
           });
+
+          // Update score display
+          this.scoreRed.textContent = this.state.scores.red;
+          this.scoreBlue.textContent = this.state.scores.blue;
+
+          // Check for win condition (25 points)
+          if (this.state.scores.red >= 25 || this.state.scores.blue >= 25) {
+            const winner = this.state.scores.red >= 25 ? 'red' : 'blue';
+            this.endGame(winner);
+          }
         }
 
         checkTitanElimination() {
@@ -1094,22 +1354,40 @@
             this.state.historyIndex + 1
           );
 
-          // Create a deep copy of the current state
-          const stateCopy = JSON.parse(JSON.stringify(this.state));
-
-          // Remove circular references and DOM elements
-          stateCopy.nodes = stateCopy.nodes.map((node) => ({
-            ...node,
-            element: null,
-          }));
-
-          stateCopy.edges = stateCopy.edges.map((edge) => ({
-            ...edge,
-            element: null,
-          }));
-
-          stateCopy.selectedNode = null;
-          stateCopy.highlightedNodes = [];
+          // Create a deep copy of the current state without circular references
+          const stateCopy = {
+            currentPlayer: this.state.currentPlayer,
+            phase: this.state.phase,
+            placedTitans: { ...this.state.placedTitans },
+            scores: { ...this.state.scores },
+            timeLeft: { ...this.state.timeLeft },
+            turnTimeLeft: this.state.turnTimeLeft,
+            gameActive: this.state.gameActive,
+            gamePaused: this.state.gamePaused,
+            soundEnabled: this.state.soundEnabled,
+            aiMode: this.state.aiMode,
+            aiPlayer: this.state.aiPlayer,
+            moveHistory: [...this.state.moveHistory],
+            historyIndex: this.state.historyIndex,
+            nodes: this.state.nodes.map(node => ({
+              id: node.id,
+              x: node.x,
+              y: node.y,
+              circuit: node.circuit,
+              occupied: node.occupied
+            })),
+            edges: this.state.edges.map(edge => ({
+              id: edge.id,
+              node1: edge.node1,
+              node2: edge.node2,
+              weight: edge.weight,
+              controlledBy: edge.controlledBy
+            })),
+            controlledEdges: {
+              red: [...this.state.controlledEdges.red],
+              blue: [...this.state.controlledEdges.blue]
+            }
+          };
 
           // Add to history
           this.state.moveHistory.push(stateCopy);
@@ -1257,29 +1535,73 @@
             return;
           }
 
-          if (this.state.phase === "placement") {
-            this.makeAIPlacement();
-          } else {
-            this.makeAIMovement();
-          }
+          // Add a small delay to make AI moves feel more natural
+          setTimeout(() => {
+            if (this.state.phase === "placement") {
+              this.makeAIPlacement();
+            } else {
+              this.makeAIMovement();
+            }
+          }, 1000);
         }
 
         makeAIPlacement() {
-          // Find all valid placement nodes
+          // Get the current allowed circuit
+          const allowedCircuit = this.getCurrentCircuit();
+          
+          // Find all valid placement nodes in the allowed circuit
           const validNodes = this.state.nodes.filter(
-            (node) => node.occupied === null && node.circuit === "outer"
+            (node) => node.occupied === null && node.circuit === allowedCircuit
           );
 
           if (validNodes.length === 0) return;
 
-          // Simple AI: choose random valid node
-          const randomIndex = Math.floor(Math.random() * validNodes.length);
-          const chosenNode = validNodes[randomIndex];
+          // AI strategy for placement:
+          // 1. Try to place near existing titans to control edges
+          // 2. If no good placement found, place randomly
+          let bestNode = null;
+          let maxScore = -1;
 
-          // Simulate click after delay
-          setTimeout(() => {
-            this.handlePlacement(chosenNode);
-          }, 800);
+          for (const node of validNodes) {
+            // Simulate placing a titan here
+            node.occupied = this.state.aiPlayer;
+            
+            // Calculate potential score from this placement
+            let potentialScore = 0;
+            const adjacentNodes = this.getAdjacentNodes(node);
+            
+            for (const adjNode of adjacentNodes) {
+              if (adjNode.occupied === this.state.aiPlayer) {
+                // Find the edge between these nodes
+                const edge = this.state.edges.find(
+                  (e) =>
+                    (e.node1 === node.id && e.node2 === adjNode.id) ||
+                    (e.node1 === adjNode.id && e.node2 === node.id)
+                );
+                if (edge) {
+                  potentialScore += edge.weight;
+                }
+              }
+            }
+
+            // Undo the simulation
+            node.occupied = null;
+
+            // Update best node if this placement is better
+            if (potentialScore > maxScore) {
+              maxScore = potentialScore;
+              bestNode = node;
+            }
+          }
+
+          // If no strategic placement found, choose randomly
+          if (!bestNode) {
+            const randomIndex = Math.floor(Math.random() * validNodes.length);
+            bestNode = validNodes[randomIndex];
+          }
+
+          // Make the move
+          this.handlePlacement(bestNode);
         }
 
         makeAIMovement() {
@@ -1290,66 +1612,82 @@
 
           if (aiTitans.length === 0) return;
 
-          // Try to find a move that captures an edge
-          for (const titan of aiTitans) {
-            const adjacentNodes = this.getAdjacentNodes(titan);
-            const emptyAdjacent = adjacentNodes.filter(
-              (node) => node.occupied === null
-            );
+          let bestMove = null;
+          let bestScore = -1;
+          let bestSource = null;
 
-            for (const target of emptyAdjacent) {
+          // Try each titan
+          for (const titan of aiTitans) {
+            const validMoves = this.getValidMoves(titan);
+            
+            // Try each possible move
+            for (const target of validMoves) {
               // Simulate the move
               titan.occupied = null;
               target.occupied = this.state.aiPlayer;
 
-              // Check if this move would capture any edges
-              const wouldCapture = this.state.edges.some((edge) => {
+              // Calculate potential score from this move
+              let potentialScore = 0;
+              
+              // Check for new edge controls
+              this.state.edges.forEach((edge) => {
                 const node1 = this.getNodeById(edge.node1);
                 const node2 = this.getNodeById(edge.node2);
-                return (
-                  edge.controlledBy !== this.state.aiPlayer &&
+                
+                if (
                   node1.occupied === this.state.aiPlayer &&
                   node2.occupied === this.state.aiPlayer
-                );
+                ) {
+                  potentialScore += edge.weight;
+                }
               });
+
+              // Check for opponent titan elimination
+              const adjacentNodes = this.getAdjacentNodes(target);
+              const opponentColor = this.getOpponentColor(this.state.aiPlayer);
+              
+              for (const adjNode of adjacentNodes) {
+                if (
+                  adjNode.occupied === opponentColor &&
+                  this.getAdjacentNodes(adjNode).every(
+                    (n) => n.occupied === this.state.aiPlayer
+                  )
+                ) {
+                  potentialScore += 10; // Bonus for elimination
+                }
+              }
 
               // Undo the simulation
               titan.occupied = this.state.aiPlayer;
               target.occupied = null;
 
-              if (wouldCapture) {
-                // Found a good move - select and move
-                setTimeout(() => {
-                  this.handleMovement(titan); // Select titan
-                  setTimeout(() => {
-                    this.handleMovement(target); // Move to target
-                  }, 500);
-                }, 800);
-                return;
+              // Update best move if this is better
+              if (potentialScore > bestScore) {
+                bestScore = potentialScore;
+                bestMove = target;
+                bestSource = titan;
               }
             }
           }
 
-          // If no capturing move found, make a random move
-          const randomTitanIndex = Math.floor(Math.random() * aiTitans.length);
-          const randomTitan = aiTitans[randomTitanIndex];
-          const adjacentNodes = this.getAdjacentNodes(randomTitan);
-          const emptyAdjacent = adjacentNodes.filter(
-            (node) => node.occupied === null
-          );
+          // If no strategic move found, make a random move
+          if (!bestMove) {
+            const randomTitan = aiTitans[Math.floor(Math.random() * aiTitans.length)];
+            const validMoves = this.getValidMoves(randomTitan);
+            if (validMoves.length > 0) {
+              bestMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+              bestSource = randomTitan;
+            }
+          }
 
-          if (emptyAdjacent.length > 0) {
-            const randomTargetIndex = Math.floor(
-              Math.random() * emptyAdjacent.length
-            );
-            const randomTarget = emptyAdjacent[randomTargetIndex];
-
+          // Make the move if we found one
+          if (bestMove && bestSource) {
+            // First select the source titan
+            this.handleMovement(bestSource);
+            // Then move to the target
             setTimeout(() => {
-              this.handleMovement(randomTitan); // Select titan
-              setTimeout(() => {
-                this.handleMovement(randomTarget); // Move to target
-              }, 500);
-            }, 800);
+              this.handleMovement(bestMove);
+            }, 500);
           }
         }
 
@@ -1498,40 +1836,71 @@
           }
         }
 
-        endGame() {
+        endGame(winner = null) {
           this.state.gameActive = false;
           clearInterval(this.gameTimer);
           clearInterval(this.turnTimer);
+          clearInterval(this.overallTimer);
 
           // Remove active state from both players
           this.playerRed.classList.remove("active");
           this.playerBlue.classList.remove("active");
 
-          // Determine winner
-          let winner = "red";
-          if (this.state.scores.blue > this.state.scores.red) {
-            winner = "blue";
-          } else if (this.state.scores.blue === this.state.scores.red) {
-            winner = "tie";
+          // Determine winner if not provided
+          if (!winner) {
+            if (this.state.scores.blue > this.state.scores.red) {
+              winner = "blue";
+            } else if (this.state.scores.blue === this.state.scores.red) {
+              winner = "tie";
+            } else {
+              winner = "red";
+            }
           }
 
           // Update status with winner color
           if (winner === "tie") {
             this.updateStatus("Game Over - It's a tie!");
           } else {
-            this.updateStatus(
-              `Game Over - ${this.capitalize(winner)} player wins!`
-            );
+            this.updateStatus(`Game Over - ${this.capitalize(winner)} player wins!`);
           }
 
           // Update leaderboard
           this.updateLeaderboard(winner);
+
+          // Show results modal
+          this.showResults(winner);
 
           // Disable controls
           this.resetBtn.disabled = false;
           this.pauseBtn.disabled = true;
           this.undoBtn.disabled = true;
           this.redoBtn.disabled = true;
+        }
+
+        showResults(winner) {
+          const winnerDisplay = document.getElementById('winner-display');
+          const finalScoreRed = document.getElementById('final-score-red');
+          const finalScoreBlue = document.getElementById('final-score-blue');
+
+          // Update scores
+          finalScoreRed.textContent = this.state.scores.red;
+          finalScoreBlue.textContent = this.state.scores.blue;
+
+          // Update winner display
+          if (winner === 'tie') {
+            winnerDisplay.textContent = "It's a Tie!";
+            winnerDisplay.className = 'winner';
+          } else {
+            winnerDisplay.textContent = `${this.capitalize(winner)} Player Wins!`;
+            winnerDisplay.className = `winner ${winner}`;
+          }
+
+          // Show modal
+          this.resultsModal.style.display = 'flex';
+        }
+
+        hideResults() {
+          this.resultsModal.style.display = 'none';
         }
 
         updateLeaderboard(winner) {
@@ -1566,6 +1935,14 @@
 
         capitalize(str) {
           return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        showHelp() {
+          this.helpModal.style.display = 'flex';
+        }
+
+        hideHelp() {
+          this.helpModal.style.display = 'none';
         }
       }
 
